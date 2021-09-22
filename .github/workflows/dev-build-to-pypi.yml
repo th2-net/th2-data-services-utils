@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - pypi_*
 
 jobs:
   build-n-publish:
@@ -40,7 +41,7 @@ jobs:
       - name: Test with pytest
         run: |
           pip install pytest
-          pytest -k "not test_data_source_local and not test_data_local"
+          pytest
       - name: Build package
         run: |
           python setup.py sdist
