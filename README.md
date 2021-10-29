@@ -1,4 +1,5 @@
-This repository is a library for creating th2-data-services applications.
+This repository is a set of auxiliary functions for th2-data-services 
+library helping to solve the most common tasks.
 
 ## Installation
 ```
