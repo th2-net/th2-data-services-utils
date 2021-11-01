@@ -5,7 +5,7 @@ from collections import defaultdict
 from functools import reduce
 from itertools import cycle, chain
 from re import sub, search
-from typing import Iterable, Union, List, Any, DefaultDict, Dict, Optional, Tuple
+from typing import Iterable, Union, List, Any, DefaultDict, Dict, Optional
 from IPython.core.display import display_html
 from pandas import DataFrame, concat, Grouper, Series
 from pandas.core.groupby import DataFrameGroupBy
