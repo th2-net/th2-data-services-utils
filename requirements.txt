@@ -2,5 +2,5 @@ pandas==1.1.5
 plotly==5.2.1
 setuptools==57.0.0
 vaex==4.3.0
-ipython==7.16.1
+ipython>=7.16.1
 dask[dataframe]==2021.3.0
