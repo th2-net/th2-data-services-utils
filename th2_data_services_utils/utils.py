@@ -5,7 +5,7 @@ from collections import defaultdict
 from functools import reduce
 from itertools import cycle, chain
 from re import sub, search
-from typing import Iterable, Union, List, Any, DefaultDict, Dict, Optional, Tuple
+from typing import Iterable, Union, List, Any, DefaultDict, Dict, Optional
 from IPython.core.display import display_html
 from pandas import DataFrame, concat, Grouper, Series
 from pandas.core.groupby import DataFrameGroupBy
@@ -97,11 +97,11 @@ def aggregate_several_group(
     if not data:
         raise ValueError("Input data is empty.")
 
-    data = DataFrame(data)
+    df = DataFrame(data)
 
     results = []
-    for column in data.columns:
-        results.append(aggregate_by_groups(data, column, total_row=True).reset_index())
+    for column in df.columns:
+        results.append(aggregate_by_groups(df, column, total_row=True).reset_index())
 
     if display_html_df:
         html_str = ""
@@ -116,9 +116,9 @@ def aggregate_several_group(
 
     if receive_df:
         result = reduce(
-            lambda df, another_df: concat([df, another_df], axis=1)
-            if len(df.index) > len(another_df.index)
-            else concat([another_df, df], axis=1),
+            lambda main_df, another_df: concat([main_df, another_df], axis=1)
+            if len(main_df.index) > len(another_df.index)
+            else concat([another_df, main_df], axis=1),
             results,
         )
         return result
