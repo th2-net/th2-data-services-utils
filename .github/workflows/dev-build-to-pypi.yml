@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        py_version: [3.7, 3.10]
+        py_version: ['3.7', '3.10']
 
     steps:
       - uses: actions/checkout@v2
@@ -37,9 +37,10 @@ jobs:
           value: ${{ steps.release_ver.outputs.value }}
       # Build and publish
       - name: Set up Python ${{ matrix.py_version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.py_version }}
+          architecture: x64
 
 
       # Build requirements for the py version
