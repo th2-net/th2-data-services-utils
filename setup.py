@@ -25,7 +25,7 @@ package_version = package_info["package_version"]
 with open("README.md", "r") as file:
     long_description = file.read()
 
-with open("requirements.txt", "r") as file:
+with open("requirements/base.txt", "r") as file:
     requirements = [
         l.strip() for l in file.readlines() if not l.startswith("#") and l != "\n"
     ]

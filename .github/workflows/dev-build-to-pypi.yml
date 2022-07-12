@@ -10,6 +10,11 @@ jobs:
   build-n-publish:
     name: Dev build and Python distributions to PyPI
     runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        py_version: [3.7, 3.10]
+
     steps:
       - uses: actions/checkout@v2
       # Prepare custom build version
@@ -31,13 +36,22 @@ jobs:
           key: 'package_version'
           value: ${{ steps.release_ver.outputs.value }}
       # Build and publish
-      - name: Set up Python 3.7
+      - name: Set up Python ${{ matrix.py_version }}
         uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: ${{ matrix.py_version }}
+
+
+      # Build requirements for the py version
+      # -name ...
+
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install pip-compile-multi
+      - name: Compile requirements
+        run: pip-compile-multi
+      - name: Install generated requirements
+        run: pip install -r requirements/base.txt
+
       - name: Test with pytest
         run: |
           pip install pytest
@@ -45,6 +59,7 @@ jobs:
       - name: Build package
         run: |
           python setup.py sdist
+          python setup.py bdist_wheel
       - name: Publish distribution to PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
