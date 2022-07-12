@@ -1,0 +1,11 @@
+pandas
+plotly
+setuptools
+blake3
+vaex-core
+vaex
+ipython>=7.16.1
+dask[dataframe]
+numba
+numpy
+ipykernel
