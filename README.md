@@ -1,3 +1,4 @@
+[![](https://img.shields.io/badge/python-3.7+-g.svg)](https://www.python.org/downloads/)
 
 Table of Contents
 =================
