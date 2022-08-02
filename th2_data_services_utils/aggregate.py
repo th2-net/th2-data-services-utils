@@ -15,6 +15,7 @@ def aggregate_by_fields(
         pivot: Union[Iterable[str], str] = None,
 ) -> Union[DataFrame, DataFrameGroupBy]:
     """Aggregates by fields using the lazy method.
+    The method need you if require to count fields or fields group.
 
     Args:
         data: Data.
@@ -25,61 +26,8 @@ def aggregate_by_fields(
     Returns:
         Statistics.
 
-    Examples:
-    --------
-    >> raw_data = [
-        {'attachedMessageIds': False, 'eventName': 'test run 1', 'successful': True,
-            'time': datetime.datetime(2021, 1, 1, 1, 1, 1), 'type': 'Test Run'},
-        {'attachedMessageIds': True, 'eventName': 'heartbeat', 'successful': True,
-            'time': datetime.datetime(2021, 1, 1, 1, 10, 2), 'type': 'Heartbeat'},
-        {'attachedMessageIds': False, 'eventName': 'test run 2', 'successful': False,
-          'time': datetime.datetime(2021, 1, 1, 1, 2, 12), 'type': 'Test Run'},
-          . . . . . ]
-    >> data = aggregate_by_fields(raw_data, "type", "successful")
-                                    count
-    type            successful
-    Heartbeat       False           2
-                    True            1
-    Receive message False           2
-                    True            3
-    Send message    False           1
-                    True            4
-    Test Case       False           1
-                    True            4
-    Test Run        False           2
-                    True            1
-    Verification    False           1
-                    True            2
-
-    >> data_total = aggregate_by_fields(raw_data, "type", "successful", total_row=True)
-                                    count
-    type            successful
-    Heartbeat       False           2.0
-                    True            1.0
-    Receive message False           2.0
-                    True            3.0
-    Send message    False           1.0
-                    True            4.0
-    Test Case       False           1.0
-                    True            4.0
-    Test Run        False           2.0
-                    True            1.0
-    Verification    False           1.0
-                    True            2.0
-    Total           Total           24.0
-
-    >> data_pivot = aggregate_by_fields(raw_data, "type", "successful", pivot="successful")
-
-    successful       False  True
-    type
-    Heartbeat            2      1
-    Receive message      2      3
-    Send message         1      4
-    Test Case            1      4
-    Test Run             2      1
-    Verification         1      2
-
-    --------
+    Raises:
+        ValueError.
     """
     df = DataFrame(data)
     if df.empty:
@@ -113,6 +61,11 @@ def aggregate_several_group(
         data: Iterable[dict], display_html_df: bool = True, receive_df: bool = False
 ) -> Optional[DataFrame]:
     """Aggregates several groups in dataframe.
+    The method divided each field on separated groups.
+
+    Note:
+        The method can use DataFrame type for output and Html type for output.
+        If you use 'Jupyter Notebook' then use display_html_df = True else False.
 
     Args:
         data: Data.
@@ -122,46 +75,8 @@ def aggregate_several_group(
     Returns:
         DataFrame with data divided into groups.
 
-    Examples:
-    --------
-    >> raw_data = [
-        {'attachedMessageIds': False, 'eventName': 'test run 1', 'successful': True,
-            'time': datetime.datetime(2021, 1, 1, 1, 1, 1), 'type': 'Test Run'},
-        {'attachedMessageIds': True, 'eventName': 'heartbeat', 'successful': True,
-            'time': datetime.datetime(2021, 1, 1, 1, 10, 2), 'type': 'Heartbeat'},
-        {'attachedMessageIds': False, 'eventName': 'test run 2', 'successful': False,
-          'time': datetime.datetime(2021, 1, 1, 1, 2, 12), 'type': 'Test Run'},
-          . . . . . ]
-    >> output = aggregate_several_group(raw_data, display_html_df=False, receive_df=True).fillna("-")
-
-                       time count             type  ... count attachedMessageIds count
-    0   2021-01-01 01:01:01   1.0        Heartbeat  ...     9              False    10
-    1   2021-01-01 01:01:59   1.0  Receive message  ...    15               True    14
-    2   2021-01-01 01:02:12   1.0     Send message  ...    24              Total    24
-    3   2021-01-01 01:03:54   1.0        Test Case  ...     -                  -     -
-    4   2021-01-01 01:04:30   1.0         Test Run  ...     -                  -     -
-    5   2021-01-01 01:10:02   1.0     Verification  ...     -                  -     -
-    6   2021-01-01 01:11:11   1.0            Total  ...     -                  -     -
-    7   2021-01-01 01:13:40   1.0                -  ...     -                  -     -
-    8   2021-01-01 01:23:23   1.0                -  ...     -                  -     -
-    9   2021-01-01 01:32:42   1.0                -  ...     -                  -     -
-    10  2021-01-01 01:33:12   1.0                -  ...     -                  -     -
-    11  2021-01-01 01:33:33   1.0                -  ...     -                  -     -
-    12  2021-01-01 01:40:10   1.0                -  ...     -                  -     -
-    13  2021-01-01 01:41:19   1.0                -  ...     -                  -     -
-    14  2021-01-01 01:43:43   1.0                -  ...     -                  -     -
-    15  2021-01-01 01:44:44   1.0                -  ...     -                  -     -
-    16  2021-01-01 01:45:22   1.0                -  ...     -                  -     -
-    17  2021-01-01 01:54:52   1.0                -  ...     -                  -     -
-    18  2021-01-01 01:55:55   1.0                -  ...     -                  -     -
-    19  2021-01-01 01:56:32   1.0                -  ...     -                  -     -
-    20  2021-01-01 02:10:01   1.0                -  ...     -                  -     -
-    21  2021-01-01 02:12:11   1.0                -  ...     -                  -     -
-    22  2021-01-01 02:12:32   1.0                -  ...     -                  -     -
-    23  2021-01-01 02:33:01   1.0                -  ...     -                  -     -
-    24                Total  24.0                -  ...     -                  -     -
-
-    --------
+    Raises:
+        ValueError.
     """
 
     if not data:
@@ -202,6 +117,7 @@ def aggregate_by_intervals_lazy(
         every: int = 1,
 ) -> DataFrame:
     """Aggregates by time using lazy method.
+    The method only to count quantity records in intervals.
 
     Args:
         data: Data.
@@ -213,25 +129,8 @@ def aggregate_by_intervals_lazy(
     Returns:
         Show all groups in dataframe.
 
-    Examples:
-    --------
-    >> raw_data = [
-        {'attachedMessageIds': False, 'eventName': 'test run 1', 'successful': True,
-            'time': datetime.datetime(2021, 1, 1, 1, 1, 1), 'type': 'Test Run'},
-        {'attachedMessageIds': True, 'eventName': 'heartbeat', 'successful': True,
-            'time': datetime.datetime(2021, 1, 1, 1, 10, 2), 'type': 'Heartbeat'},
-        {'attachedMessageIds': False, 'eventName': 'test run 2', 'successful': False,
-          'time': datetime.datetime(2021, 1, 1, 1, 2, 12), 'type': 'Test Run'},
-          . . . . . ]
-    >> output = aggregate_by_intervals_lazy(data_for_analyzing, "time", resolution="m", every=30)
-
-    time  count
-    0 2021-01-01 01:02:00      7
-    1 2021-01-01 01:32:00     11
-    2 2021-01-01 02:02:00      3
-    3 2021-01-01 02:32:00      1
-
-    --------
+    Raises:
+        ValueError.
     """
     if not data:
         raise ValueError("Input data is empty.")
@@ -256,6 +155,7 @@ def aggregate_by_intervals(
         pivot: Union[Iterable[str], str] = None,
 ) -> DataFrame:
     """Aggregates by fields with time intervals.
+    The method count records and records groups in intervals.
 
     Args:
         data: Data.
@@ -268,103 +168,8 @@ def aggregate_by_intervals(
     Returns:
         Statistics.
 
-    Examples:
-    --------
-    >> raw_data = [
-        {'attachedMessageIds': False, 'eventName': 'test run 1', 'successful': True,
-            'time': datetime.datetime(2021, 1, 1, 1, 1, 1), 'type': 'Test Run'},
-        {'attachedMessageIds': True, 'eventName': 'heartbeat', 'successful': True,
-            'time': datetime.datetime(2021, 1, 1, 1, 10, 2), 'type': 'Heartbeat'},
-        {'attachedMessageIds': False, 'eventName': 'test run 2', 'successful': False,
-          'time': datetime.datetime(2021, 1, 1, 1, 2, 12), 'type': 'Test Run'},
-          . . . . . ]
-    >> data = aggregate_by_intervals(data_for_analyzing, "time", "eventName", "type", intervals="min")
-                                                            count
-    time                eventName      type
-    2021-01-01 01:01:00 test case 3    Test Case            1
-                        test run 1     Test Run             1
-    2021-01-01 01:02:00 test run 2     Test Run             1
-    2021-01-01 01:03:00 message        Send message         1
-    2021-01-01 01:04:00 test case 1    Test Case            1
-    2021-01-01 01:10:00 heartbeat      Heartbeat            1
-    2021-01-01 01:11:00 message 444    Receive message      1
-    2021-01-01 01:13:00 message123     Receive message      1
-    2021-01-01 01:23:00 message 333    Receive message      1
-    2021-01-01 01:32:00 test run 3     Test Case            1
-    2021-01-01 01:33:00 heartbeat      Heartbeat            1
-                        test run 4     Test Run             1
-    2021-01-01 01:40:00 test case 4    Test Case            1
-    2021-01-01 01:41:00 message122     Receive message      1
-    2021-01-01 01:43:00 message 444    Send message         1
-    2021-01-01 01:44:00 message122     Send message         1
-    2021-01-01 01:45:00 verification32 Verification         1
-    2021-01-01 01:54:00 verification33 Verification         1
-    2021-01-01 01:55:00 message 333    Send message         1
-    2021-01-01 01:56:00 message 444    Receive message      1
-    2021-01-01 02:10:00 test case 2    Test Case            1
-    2021-01-01 02:12:00 heartbeat      Heartbeat            1
-                        message123     Send message         1
-    2021-01-01 02:33:00 verification   Verification         1
-
-    >> data = aggregate_by_intervals(data_for_analyzing, "time", "eventName", "type", intervals="min", total_row=True)
-                                                            count
-    time                eventName      type
-    2021-01-01 01:01:00 test case 3    Test Case            1
-                        test run 1     Test Run             1
-    2021-01-01 01:02:00 test run 2     Test Run             1
-    2021-01-01 01:03:00 message        Send message         1
-    2021-01-01 01:04:00 test case 1    Test Case            1
-    2021-01-01 01:10:00 heartbeat      Heartbeat            1
-    2021-01-01 01:11:00 message 444    Receive message      1
-    2021-01-01 01:13:00 message123     Receive message      1
-    2021-01-01 01:23:00 message 333    Receive message      1
-    2021-01-01 01:32:00 test run 3     Test Case            1
-    2021-01-01 01:33:00 heartbeat      Heartbeat            1
-                        test run 4     Test Run             1
-    2021-01-01 01:40:00 test case 4    Test Case            1
-    2021-01-01 01:41:00 message122     Receive message      1
-    2021-01-01 01:43:00 message 444    Send message         1
-    2021-01-01 01:44:00 message122     Send message         1
-    2021-01-01 01:45:00 verification32 Verification         1
-    2021-01-01 01:54:00 verification33 Verification         1
-    2021-01-01 01:55:00 message 333    Send message         1
-    2021-01-01 01:56:00 message 444    Receive message      1
-    2021-01-01 02:10:00 test case 2    Test Case            1
-    2021-01-01 02:12:00 heartbeat      Heartbeat            1
-                        message123     Send message         1
-    2021-01-01 02:33:00 verification   Verification         1
-    Total               Total          Total             24.0
-
-    >> data = aggregate_by_intervals(data_for_analyzing, "time", "eventName", "type", intervals="min", pivot="type")
-
-    type                                Heartbeat  ...  Verification
-    time                eventName                  ...
-    2021-01-01 01:01:00 test case 3           NaN  ...           NaN
-                        test run 1            NaN  ...           NaN
-    2021-01-01 01:02:00 test run 2            NaN  ...           NaN
-    2021-01-01 01:03:00 message               NaN  ...           NaN
-    2021-01-01 01:04:00 test case 1           NaN  ...           NaN
-    2021-01-01 01:10:00 heartbeat             1.0  ...           NaN
-    2021-01-01 01:11:00 message 444           NaN  ...           NaN
-    2021-01-01 01:13:00 message123            NaN  ...           NaN
-    2021-01-01 01:23:00 message 333           NaN  ...           NaN
-    2021-01-01 01:32:00 test run 3            NaN  ...           NaN
-    2021-01-01 01:33:00 heartbeat             1.0  ...           NaN
-                        test run 4            NaN  ...           NaN
-    2021-01-01 01:40:00 test case 4           NaN  ...           NaN
-    2021-01-01 01:41:00 message122            NaN  ...           NaN
-    2021-01-01 01:43:00 message 444           NaN  ...           NaN
-    2021-01-01 01:44:00 message122            NaN  ...           NaN
-    2021-01-01 01:45:00 verification32        NaN  ...           1.0
-    2021-01-01 01:54:00 verification33        NaN  ...           1.0
-    2021-01-01 01:55:00 message 333           NaN  ...           NaN
-    2021-01-01 01:56:00 message 444           NaN  ...           NaN
-    2021-01-01 02:10:00 test case 2           NaN  ...           NaN
-    2021-01-01 02:12:00 heartbeat             1.0  ...           NaN
-                        message123            NaN  ...           NaN
-    2021-01-01 02:33:00 verification          NaN  ...           1.0
-
-    --------
+    Raises:
+        ValueError.
     """
     if not data:
         raise ValueError("Input data is empty.")

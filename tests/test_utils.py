@@ -1,7 +1,5 @@
 from typing import List
 
-import pytest
-
 from th2_data_services_utils.aggregate import aggregate_by_fields
 from th2_data_services_utils.utils import search_fields, append_total_rows, delete_string_by_pattern, find_tag_in_string
 
@@ -127,4 +125,5 @@ def test_find_tag_in_string():
     tag = "'Tag2'"
 
     assert find_tag_in_string(string, tag) == "value2"
+
 
