@@ -53,13 +53,12 @@ jobs:
       - name: Install generated requirements
         run: pip install -r requirements/base.txt
 
-      - name: Test with pytest
-        run: |
-          pip install pytest
-          pytest
+#       - name: Test with pytest
+#         run: |
+#           pip install pytest
+#           pytest
       - name: Build package
         run: |
-          python setup.py sdist
           python setup.py bdist_wheel --python-tag=py${{ matrix.py_version }}
       - name: Publish distribution to PyPI
         uses: pypa/gh-action-pypi-publish@master
