@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        py_version: ['3.7', '3.10']
+        py_version: ['3.8', '3.10']
 
     steps:
       - uses: actions/checkout@v2
@@ -57,9 +57,16 @@ jobs:
 #         run: |
 #           pip install pytest
 #           pytest
+      - name: Get python tag
+        env:
+          PYTAG: "py${{ matrix.py_version }}"
+        run: |
+          PYTAG=${{ env.PYTAG }}
+          PYTAG=${PYTAG//.} # replace all dots
+          echo PYTAG=${PYTAG} >> $GITHUB_ENV # update GitHub ENV vars
       - name: Build package
         run: |
-          python setup.py bdist_wheel --python-tag=py${{ matrix.py_version }}
+          python setup.py bdist_wheel --python-tag=${{ env.PYTAG }}
       - name: Publish distribution to PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
