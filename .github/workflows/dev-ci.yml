@@ -8,6 +8,7 @@ on:
     branches:
       - dev_*
       - pypi_*
+  pull_request:
 
 jobs:
   tests:
