@@ -8,7 +8,13 @@ jobs:
     name: Publish Python distributions to PyPI
     runs-on: ubuntu-20.04
     steps:
-      - uses: pypa/gh-action-pypi-publish@master
+      - name: Download build-output artifact
+        uses: actions/download-artifact@master
+        with:
+          name: build-output
+          path: dist/
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_PASSWORD }}

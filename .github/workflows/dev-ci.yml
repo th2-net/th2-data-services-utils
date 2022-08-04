@@ -20,14 +20,4 @@ jobs:
 
   publish:
     needs: [ tests, build ]
-
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Download build-output artifact
-        uses: actions/download-artifact@master
-        with:
-          name: build-output
-          path: dist/
-
-      - name: Publish source and wheel
-        uses: ./.github/workflows/publish.yml
+    uses: ./.github/workflows/publish.yml
