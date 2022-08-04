@@ -1,0 +1,31 @@
+name: Build
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    name: Build release version
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build package
+        run: |
+          python setup.py sdist
+          python setup.py bdist_wheel
+
+      - name: Create build-output artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: build-output
+          path: dist/

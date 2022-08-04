@@ -1,0 +1,32 @@
+name: Dev build and publish Python distributions to PyPI
+
+# It'll build package even if tests is failed. It's special for debug purposes.
+
+
+on:
+  push:
+    branches:
+      - dev_*
+      - pypi_*
+
+jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml
+
+  build:
+    needs: [ tests ]
+    uses: ./.github/workflows/build-dev.yml
+
+  publish:
+    needs: [ tests, build ]
+
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Download build-output artifact
+        uses: actions/download-artifact@master
+        with:
+          name: build-output
+          path: dist/
+
+      - name: Publish source and wheel
+        uses: ./.github/workflows/publish.yml
