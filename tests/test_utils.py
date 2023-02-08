@@ -3,7 +3,7 @@ import pytest
 from typing import List
 from pandas import Timestamp
 
-from th2_data_services_utils.utils import (
+from th2.data_services.utils.pandas.utils import (
     aggregate_by_groups,
     aggregate_by_intervals,
     aggregate_several_group,
