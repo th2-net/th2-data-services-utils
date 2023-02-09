@@ -42,6 +42,7 @@ setup(
     license="Apache License 2.0",
     python_requires=">=3.7",
     install_requires=requirements,
-    packages=find_packages(include=["th2_data_services_utils", "th2_data_services_utils.*"]),
+    packages=find_packages(include=["th2", 'th2.data_services', 'th2.data_services.utils','th2.data_services.utils.pandas']),
+    namespace_packages = ['th2', 'th2.data_services', 'th2.data_services.utils'],
     include_package_data=True,
 )

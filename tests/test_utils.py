@@ -1,7 +1,7 @@
 from typing import List
 
-from th2_data_services_utils.aggregate import aggregate_by_fields
-from th2_data_services_utils.utils import search_fields, append_total_rows, delete_string_by_pattern, find_tag_in_string
+from th2.data_services.utils.pandas.aggregate import aggregate_by_fields
+from th2.data_services.utils.pandas.utils import search_fields, append_total_rows, delete_string_by_pattern, find_tag_in_string
 
 
 def test_search_fields_with_general_body(general_body: dict):
