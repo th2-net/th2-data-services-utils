@@ -1,8 +1,6 @@
-import pytest
-
 from typing import List
-from pandas import Timestamp
 
+<<<<<<< HEAD
 from th2.data_services.utils.pandas.utils import (
     aggregate_by_groups,
     aggregate_by_intervals,
@@ -323,6 +321,10 @@ def test_aggregate_several_group(data_for_analyzing: List[dict]):
             24: "-",
         },
     }
+=======
+from th2_data_services_utils.aggregate import aggregate_by_fields
+from th2_data_services_utils.utils import search_fields, append_total_rows, delete_string_by_pattern, find_tag_in_string
+>>>>>>> origin/dev_0.4.0
 
 
 def test_search_fields_with_general_body(general_body: dict):
@@ -368,7 +370,7 @@ def test_search_fields_with_complex_body(complex_body: List[dict]):
 
 
 def test_append_total_rows_not_change(data_for_analyzing: List[dict]):
-    statistics = aggregate_by_groups(
+    statistics = aggregate_by_fields(
         data_for_analyzing, "eventName", "type", "successful"
     )
 
@@ -379,7 +381,7 @@ def test_append_total_rows_not_change(data_for_analyzing: List[dict]):
 
 
 def test_append_total_rows(data_for_analyzing: List[dict]):
-    statistics = aggregate_by_groups(
+    statistics = aggregate_by_fields(
         data_for_analyzing, "eventName", "type", "successful"
     )
     statistics = append_total_rows(statistics, {"count": "sum"})
@@ -448,94 +450,3 @@ def test_find_tag_in_string():
     assert find_tag_in_string(string, tag) == "value2"
 
 
-def test_aggregate_group_by_intervals_data_empty():
-    with pytest.raises(ValueError) as exc_info:
-        aggregate_groups_by_intervals([], "time", "field")
-    assert exc_info.value
-
-
-def test_aggregate_group_by_intervals_fields_empty():
-    with pytest.raises(ValueError) as exc_info:
-        aggregate_groups_by_intervals([{"time": ["test"]}], "time", [])
-    assert exc_info.value
-
-
-def test_aggregate_group_by_intervals_time_series_empty():
-    with pytest.raises(ValueError) as exc_info:
-        aggregate_groups_by_intervals([{"time": []}], "time", "field")
-    assert exc_info.value
-
-
-def test_aggregate_group_by_intervals_time_has_not_time_type():
-    with pytest.raises(ValueError) as exc_info:
-        aggregate_groups_by_intervals(
-            [{"time": ["test1", "test2", "test3"]}], "time", "field"
-        )
-    assert exc_info.value
-
-
-def test_aggregate_groups_by_intervals(data_for_analyzing: List[dict]):
-    output = aggregate_groups_by_intervals(
-        data_for_analyzing,
-        "time",
-        "eventName",
-        "successful",
-        intervals="10min",
-        total_row=True,
-        pivot="successful",
-    ).fillna("-")
-
-    assert output.to_dict() == {
-        False: {
-            (Timestamp("2021-01-01 01:00:00"), "message"): 1.0,
-            (Timestamp("2021-01-01 01:00:00"), "test case 1"): "-",
-            (Timestamp("2021-01-01 01:00:00"), "test case 3"): 1.0,
-            (Timestamp("2021-01-01 01:00:00"), "test run 1"): "-",
-            (Timestamp("2021-01-01 01:00:00"), "test run 2"): 1.0,
-            (Timestamp("2021-01-01 01:10:00"), "heartbeat"): "-",
-            (Timestamp("2021-01-01 01:10:00"), "message 444"): 1.0,
-            (Timestamp("2021-01-01 01:10:00"), "message123"): "-",
-            (Timestamp("2021-01-01 01:20:00"), "message 333"): 1.0,
-            (Timestamp("2021-01-01 01:30:00"), "heartbeat"): 1.0,
-            (Timestamp("2021-01-01 01:30:00"), "test run 3"): "-",
-            (Timestamp("2021-01-01 01:30:00"), "test run 4"): 1.0,
-            (Timestamp("2021-01-01 01:40:00"), "message 444"): "-",
-            (Timestamp("2021-01-01 01:40:00"), "message122"): "-",
-            (Timestamp("2021-01-01 01:40:00"), "test case 4"): "-",
-            (Timestamp("2021-01-01 01:40:00"), "verification32"): "-",
-            (Timestamp("2021-01-01 01:50:00"), "message 333"): "-",
-            (Timestamp("2021-01-01 01:50:00"), "message 444"): "-",
-            (Timestamp("2021-01-01 01:50:00"), "verification33"): 1.0,
-            (Timestamp("2021-01-01 02:10:00"), "heartbeat"): 1.0,
-            (Timestamp("2021-01-01 02:10:00"), "message123"): "-",
-            (Timestamp("2021-01-01 02:10:00"), "test case 2"): "-",
-            (Timestamp("2021-01-01 02:30:00"), "verification"): "-",
-            ("Total", "Total"): 9.0,
-        },
-        True: {
-            (Timestamp("2021-01-01 01:00:00"), "message"): "-",
-            (Timestamp("2021-01-01 01:00:00"), "test case 1"): 1.0,
-            (Timestamp("2021-01-01 01:00:00"), "test case 3"): "-",
-            (Timestamp("2021-01-01 01:00:00"), "test run 1"): 1.0,
-            (Timestamp("2021-01-01 01:00:00"), "test run 2"): "-",
-            (Timestamp("2021-01-01 01:10:00"), "heartbeat"): 1.0,
-            (Timestamp("2021-01-01 01:10:00"), "message 444"): "-",
-            (Timestamp("2021-01-01 01:10:00"), "message123"): 1.0,
-            (Timestamp("2021-01-01 01:20:00"), "message 333"): "-",
-            (Timestamp("2021-01-01 01:30:00"), "heartbeat"): "-",
-            (Timestamp("2021-01-01 01:30:00"), "test run 3"): 1.0,
-            (Timestamp("2021-01-01 01:30:00"), "test run 4"): "-",
-            (Timestamp("2021-01-01 01:40:00"), "message 444"): 1.0,
-            (Timestamp("2021-01-01 01:40:00"), "message122"): 2.0,
-            (Timestamp("2021-01-01 01:40:00"), "test case 4"): 1.0,
-            (Timestamp("2021-01-01 01:40:00"), "verification32"): 1.0,
-            (Timestamp("2021-01-01 01:50:00"), "message 333"): 1.0,
-            (Timestamp("2021-01-01 01:50:00"), "message 444"): 1.0,
-            (Timestamp("2021-01-01 01:50:00"), "verification33"): "-",
-            (Timestamp("2021-01-01 02:10:00"), "heartbeat"): "-",
-            (Timestamp("2021-01-01 02:10:00"), "message123"): 1.0,
-            (Timestamp("2021-01-01 02:10:00"), "test case 2"): 1.0,
-            (Timestamp("2021-01-01 02:30:00"), "verification"): 1.0,
-            ("Total", "Total"): 15.0,
-        },
-    }
