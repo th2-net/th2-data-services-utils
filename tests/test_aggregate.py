@@ -4,7 +4,7 @@ from typing import List
 
 from pandas import Timestamp
 
-from th2_data_services_utils.aggregate import (
+from th2.data_services.utils.pandas.aggregate import (
     aggregate_by_fields,
     aggregate_by_intervals,
     aggregate_several_group,
