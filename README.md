@@ -1,5 +1,7 @@
 [![](https://img.shields.io/badge/python-3.7+-g.svg)](https://www.python.org/downloads/)
 
+# Since v0.4 this repo use DS-core v2 structure and can be used only with DS-core v2
+
 Table of Contents
 =================
 
