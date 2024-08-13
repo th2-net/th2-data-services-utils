@@ -17,6 +17,5 @@ jobs:
       style-check-enabled: false
       strict-style-check: false
       python-check-versions: "['3.8', '3.9', '3.10', '3.11', '3.12']"
-      test-requirements-file: requirements_dev.txt
     secrets:
       pypi-password: ${{ secrets.PYPI_PASSWORD }}
