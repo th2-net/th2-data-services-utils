@@ -1,4 +1,4 @@
-#   Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+#   Copyright 2020-2024 Exactpro (Exactpro Systems Limited)
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -40,9 +40,9 @@ setup(
     author_email="th2-devs@exactprosystems.com",
     url="https://github.com/th2-net/th2-data-services-utils",
     license="Apache License 2.0",
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     install_requires=requirements,
-    packages=find_packages(include=["th2", 'th2.th2_data_services', 'th2.th2_data_services.utils','th2.th2_data_services.utils.pandas']),
-    namespace_packages = ['th2', 'th2.th2_data_services', 'th2.th2_data_services.utils'],
+    packages=find_packages(include=['th2_data_services', 'th2_data_services.utils', 'th2_data_services.utils.pandas']),
+    namespace_packages=['th2_data_services', 'th2_data_services.utils'],
     include_package_data=True,
 )
