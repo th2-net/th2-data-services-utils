@@ -1,6 +1,6 @@
 pandas>=2.0.0,<3
 plotly>=5.2.1,<6
-setuptools>=75.1.0,<76
+setuptools>=75.1.0,<81
 blake3>=0.4.1,<1
 # vaex-core==4.5.1
 # vaex==4.3.0
